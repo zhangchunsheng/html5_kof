@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>seaking</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=720,user-scalable=no,initial-scale=1.0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="oupengmobile" content="fullscreen,landscape,game" />
+		<meta name="game-engine" content="wozlla" />
+		<meta http-equiv="X-UA-Compatible" content="IE=9" />
+		<link rel="apple-touch-icon-precomposed" href="114x114.png" />
+		<link rel="apple-touch-startup-image" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" href="114x114.png">
+		<style type="text/css">
+			body {
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				background: #000000;
+			}
+			.div {
+				background: gray;
+				width: 100px;
+				height: 100px;
+				margin: 0 auto;
+				margin-bottom: 10px;
+			}
+
+			canvas {
+				position: relative;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="info" align="center" style="position:absolute;left: 200px;bottom: 100px">
+			<font style ="font-size: 20px; font-family: Courier New; color: #FFFFFF">
+				<span id="framecounter">(0/0 fps)</span>
+			</font>
+		</div>
+		<div id="jsapp" align="center">
+			
+		</div>
+		<script type="text/javascript" src="./js/lib/melonJS-0.9.4.js"></script>
+		<script type="text/javascript" src="./js/lib/astar-concat.js"></script>
+		<script type="text/javascript" src="./js/resources.js"></script>
+		<script type="text/javascript" src="./js/util.js"></script>
+
+		<script type="text/javascript" src="./js/particle_system/particle.js"></script>
+		<script type="text/javascript" src="./js/particle_system/emitter.js"></script>
+		<script type="text/javascript" src="./js/particle_system/render.js"></script>
+
+		<script type="text/javascript" src="./js/entities.js"></script>
+		<script type="text/javascript" src="./js/portal.js"></script>
+
+		<script type="text/javascript" src="./js/seaking.js"></script>
+		<script type="text/javascript" src="./main.js"></script>
+	</body>
+</html>
