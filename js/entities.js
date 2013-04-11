@@ -5,8 +5,9 @@
 /*************************/
 var PlayerEntity = me.ObjectEntity.extend({
 	init: function(x, y, settings) {
-		settings.image = "gripe_run_right";
-		settings.spritewidth = 64;
+		settings.image = "charactor";
+		settings.spritewidth = 87;
+		settings.spriteheight = 122;
 		// call the constructor
 		this.parent(x, y, settings);
 
@@ -16,25 +17,29 @@ var PlayerEntity = me.ObjectEntity.extend({
 		// player's path.
 		this.path = [];
 		// register the mousedown event on map
-		me.input.registerMouseEvent("mousedown", new me.Rect(new me.Vector2d(0, 0), me.game.collisionMap.realwidth, me.game.collisionMap.realheight), this.mouseDown.bind(this));
+		me.input.registerMouseEvent("mousedown", null, this.mouseDown.bind(this));
 
 		// adjust the bounding box
-		this.updateColRect(8, 48, -1, 0);
-
+		//this.updateColRect(8, 48, -1, 0);
 		// set the display to follow our position on both axis
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 
 		this._initGraph();
 
 		this.__defineGetter__("curX", function() {
-			return this.pos.x + 32;
+			return this.pos.x + 43;
 		});
 		this.__defineGetter__("curY", function() {
-			return this.pos.y + 64;
+			return this.pos.y + 122;
 		});
 
-		this.tileLayer = me.game.currentLevel.getLayerByName("Tile Layer 1");
+		this.tileLayer = me.game.currentLevel.getLayerByName("background");
 		this.layerRenderer = this.tileLayer.renderer;
+
+		this.addAnimation("up", [0,1,2,3,4,5,6,7]);
+		this.addAnimation("down", [8,9,10,11,12,13,14,15]);
+		this.addAnimation("horizontal", [16,17,18,19,20,21,22,23]);
+		this.setCurrentAnimation("down");
 	},
 
 	/**
@@ -54,11 +59,6 @@ var PlayerEntity = me.ObjectEntity.extend({
 			}
 		}
 
-		// this.graph = new PF.Grid(colCount, rowCount, matrix);
-		// this.pathFinder = new PF.AStarFinder({
-		// 	allowDiagonal: true,
-		// 	dontCrossCorners: false
-		// });
 		this.graph = new Graph(matrix);
 	},
 	/**
@@ -72,14 +72,6 @@ var PlayerEntity = me.ObjectEntity.extend({
 			return;
 		}
 
-		// var graphBackup = this.graph.clone(),
-		// that = this;
-		// var path = this.pathFinder.findPath(start.x, start.y, end.x, end.y, graphBackup);
-		// if (path.length) {
-		// 	graphBackup = this.graph.clone();
-		// 	path = PF.Util.smoothenPath(graphBackup, path);
-		// }
-		console.log(this.graph);
 		var path = astar.search(this.graph.nodes, this.graph.nodes[start.x][start.y], this.graph.nodes[end.x][end.y], true);
 
 		if (!path.length && end.x == start.x && end.y == start.y) {
@@ -103,8 +95,8 @@ var PlayerEntity = me.ObjectEntity.extend({
 			} else {
 				node.pos = that._getPosition(node.x, node.y);
 				node.pos.add({
-					x: 32,
-					y: 32
+					x: 43,
+					y: 61
 				});
 			}
 			return node;
@@ -191,13 +183,20 @@ var PlayerEntity = me.ObjectEntity.extend({
 			this.vel.y = 0;
 		}
 
+		if(this.vel.x == 0 && this.vel.y > 0) {
+			this.setCurrentAnimation("down");
+		} else if(this.vel.y < 0) {
+			this.setCurrentAnimation("up");
+		} else if(this.vel.x != 0 && this.vel.y != 0) {
+			this.setCurrentAnimation("horizontal");
+		}
+
 		// check & update player movement
 		this.updateMovement();
-
-		// update animation
+		// update object animation
+		this.parent();
+		
 		if (this.vel.x != 0 || this.vel.y != 0 || this.path.length) {
-			// update object animation
-			this.parent();
 			return true;
 		}
 
@@ -301,13 +300,13 @@ var CoinEntity = MoveableEntity.extend({
 		var dest;
 		this.dests.forEach(function(d) {
 			var res = this.collisionBox.collideVsAABB(d.rect);
-			if(res.x != 0 || res.y != 0) {
+			if (res.x != 0 || res.y != 0) {
 				dest = d;
 				return false;
 			}
 		}, this);
 
-		if(dest) {
+		if (dest) {
 			this.pos.x = this.sourcePos.x = dest.pos.x - 16;
 			this.pos.y = this.sourcePos.y = dest.pos.y - 16;
 		} else {
